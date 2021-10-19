@@ -1,5 +1,6 @@
 const UserModel = require("../models/userModels");
 const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
 
 exports.signup = (req, res, next) => {
   bcrypt
@@ -21,6 +22,7 @@ exports.signup = (req, res, next) => {
 exports.login = (req, res, next) => {
   UserModel.findOne({ email: req.body.email })
     .then((user) => {
+      console.log(user);
       if (!user) {
         return res.status(401).json({ error: "Utilisateur non trouvé !" });
       }
@@ -32,7 +34,9 @@ exports.login = (req, res, next) => {
           }
           res.status(200).json({
             userId: user._id,
-            token: "TOKEN",
+            token: jwt.sign({ userId: user._id }, "RAMDOM_TOKEN_SECRET", {
+              expiresIn: "24h",
+            }),
           });
         })
         .catch((error) => res.status(500).json({ error }));
