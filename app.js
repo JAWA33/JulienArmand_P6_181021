@@ -3,9 +3,9 @@ const mongoose = require("mongoose");
 const cors = require("cors");
 const path = require("path");
 
-const UserModel = require("./models/userModels");
+//const UserModel = require("./models/userModel");
 const userRoute = require("./routes/userRoute");
-
+const sauceRoute = require("./routes/sauceRoute");
 //* Connexion à MongoDB avec mongoose :
 
 mongoose
@@ -42,6 +42,7 @@ app.use(express.json());
 
 app.use("/images", express.static(path.join(__dirname, "images")));
 app.use("/api/auth", userRoute);
+app.use("/api/sauces", sauceRoute);
 
 //* Route Signup :
 

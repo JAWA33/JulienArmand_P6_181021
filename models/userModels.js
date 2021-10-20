@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 const uniqueValidator = require("mongoose-unique-validator");
-//const { isEmail } = require("validator");
-//const { isStrongPassword } = require("validator");
+const { isEmail } = require("validator");
+const { isStrongPassword } = require("validator");
 // const bcrypt = require("bcrypt");
 
 //* création du schéma Utilisateur : --------------------------------------//
@@ -10,7 +10,7 @@ const userSchema = mongoose.Schema({
   email: {
     type: String,
     required: true,
-    //validate: [isEmail],
+    validate: [isEmail],
     lowercase: true,
     unique: true,
     trim: true,
@@ -18,7 +18,7 @@ const userSchema = mongoose.Schema({
   password: {
     type: String,
     required: true,
-    //validate: [isStrongPassword],
+    validate: [isStrongPassword],
     maxlength: 1024,
     minlength: 6,
   },
