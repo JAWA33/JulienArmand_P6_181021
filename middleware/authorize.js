@@ -6,11 +6,11 @@ module.exports = (req, res, next) => {
     const decodedToken = jwt.verify(token, "RAMDOM_TOKEN_SECRET");
     const userId = decodedToken.userId;
     if (req.body.userId && req.body.userId !== userId) {
-      throw "User ID non valable !";
+      throw "403: unauthorized request";
     } else {
       next();
     }
   } catch (error) {
-    res.status(401).json({ error: error | "Requete non authentifiée" });
+    res.status(403).json({ error: "403: unauthorized request" });
   }
 };

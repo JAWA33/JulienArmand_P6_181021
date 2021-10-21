@@ -3,7 +3,6 @@ const mongoose = require("mongoose");
 const cors = require("cors");
 const path = require("path");
 
-//const UserModel = require("./models/userModel");
 const userRoute = require("./routes/userRoute");
 const sauceRoute = require("./routes/sauceRoute");
 //* Connexion à MongoDB avec mongoose :
@@ -21,19 +20,6 @@ mongoose
 
 const app = express();
 
-//* Autorisation CORS (version openclassrooms):
-// app.use((req, res, next) => {
-//   res.setHeader("Access-Control-Allow-Origin", "*");
-//   res.setHeader(
-//     "Access-Control-Allow-Headers",
-//     "Origin, X-Requested-With, Content, Accept, Content-Type, Authorization"
-//   );
-//   res.setHeader(
-//     "Access-Control-Allow-Methods",
-//     "GET, POST, PUT, DELETE, PATCH, OPTIONS"
-//   );
-//   next();
-// });
 //* Autorisation CORS (version fromscratch):
 app.use(cors());
 
@@ -44,16 +30,4 @@ app.use("/images", express.static(path.join(__dirname, "images")));
 app.use("/api/auth", userRoute);
 app.use("/api/sauces", sauceRoute);
 
-//* Route Signup :
-
-// app.post("/api/auth/signup", (req, res) => {
-//   console.log(req.body);
-//   const user = new UserModel({
-//     ...req.body,
-//   });
-//   user
-//     .save()
-//     .then(() => res.status(201).json({ message: "Utilisateur créé !" }))
-//     .catch((err) => res.status(400).json("voici " + err));
-// });
 module.exports = app;

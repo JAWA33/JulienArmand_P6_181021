@@ -34,6 +34,7 @@ const sauceSchema = mongoose.Schema({
     // trim: true,
   },
   mainPepper: {
+    //! A VOIR PROBLEME : Nom unique alors que non selectionné ??? !!!!!!! //
     type: String,
     required: true,
     //validate: [isAlphanumeric],
@@ -44,7 +45,7 @@ const sauceSchema = mongoose.Schema({
   imageUrl: {
     type: String,
     required: true,
-  }, //! A VOIR ULTERIEUREMENT !!!!!!! //
+  },
 
   //NUMBER: =
   heat: {
