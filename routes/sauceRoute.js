@@ -14,6 +14,3 @@ router.post("/:id/like", authorize, sauceCtrl.likeSauce);
 // etc ....
 
 module.exports = router;
-
-//! après création des route sauce : modification pour prise en compte de multer à réaliser
-//! (OC : Modifiez les routes pour prendre en compte les fichiers )

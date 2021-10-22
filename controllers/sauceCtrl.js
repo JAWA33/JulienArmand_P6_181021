@@ -21,7 +21,7 @@ exports.showOne = (req, res, next) => {
 exports.createSauce = (req, res, next) => {
   const sauceObject = JSON.parse(req.body.sauce);
   //console.log(req.body);
-  delete sauceObject._id;
+  //delete sauceObject._id;
   const sauce = new SauceModel({
     ...sauceObject,
     imageUrl: `${req.protocol}://${req.get("host")}/images/${
@@ -42,8 +42,8 @@ exports.createSauce = (req, res, next) => {
 exports.modifySauce = (req, res, next) => {
   //* test suppression image existante
   SauceModel.findOne({ _id: req.params.id }).then((sauce) => {
-    const filename = sauce.imageUrl.split("/images/")[1];
-    fs.unlink(`images/${filename}`, () => {
+    const deleteFile = sauce.imageUrl.split("/images/")[1];
+    fs.unlink(`images/${deleteFile}`, () => {
       const sauceObject = req.file
         ? {
             ...JSON.parse(req.body.sauce),
@@ -83,4 +83,63 @@ exports.deleteSauce = (req, res, next) => {
 
 //* Liker les sauces :
 
-exports.likeSauce = (req, res, next) => {};
+exports.likeSauce = (req, res, next) => {
+  // si le like dans la requete est = a 1 //
+  if (req.body.like === 1) {
+    SauceModel.updateOne(
+      { _id: req.params.id },
+      {
+        $inc: { likes: req.body.like++ },
+        $push: { usersLiked: req.body.userId },
+      }
+    )
+      .then((sauce) => res.status(200).json({ message: "Like ajouté" }))
+      .catch((error) => res.status(400).json({ error }));
+
+    // ou si le like dans la requete est = a -1 //
+  } else if (req.body.like === -1) {
+    SauceModel.updateOne(
+      { _id: req.params.id },
+      {
+        $inc: { dislikes: req.body.like++ * -1 },
+        $push: { usersDisliked: req.body.userId },
+      }
+    )
+      .then((sauce) => res.status(200).json({ message: "DisLike ajouté" }))
+      .catch((error) => res.status(400).json({ error }));
+  } else {
+    //  sinon si like = 0 on vient chercher les données de la sauce avec son id //
+    SauceModel.findOne({ _id: req.params.id })
+      .then((sauce) => {
+        // si dans le tableau des usersLiked on a userId alors //
+        if (sauce.usersLiked.includes(req.body.userId)) {
+          SauceModel.updateOne(
+            { _id: req.params.id },
+            { $pull: { usersLiked: req.body.userId }, $inc: { likes: -1 } }
+          )
+            .then((sauce) => {
+              res.status(200).json({ message: "Like supprimé " });
+            })
+            .catch((error) => res.status(400).json({ error }));
+
+          // ou si dans le tableau userDisliked on trouve l'userId alors //
+        } else if (sauce.usersDisliked.includes(req.body.userId)) {
+          SauceModel.updateOne(
+            { _id: req.params.id },
+            {
+              $pull: { usersDisliked: req.body.userId },
+              $inc: { dislikes: -1 },
+            }
+          )
+            .then((sauce) => {
+              res.status(200).json({ message: "Dislike supprimé" });
+            })
+            .catch((error) => res.status(400).json({ error }));
+        } else {
+          throw "Utilisateur non trouvé";
+        }
+      })
+      .catch((error) => res.status(400).json({ error }));
+  }
+  //next()
+};

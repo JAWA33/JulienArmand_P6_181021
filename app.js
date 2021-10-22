@@ -1,3 +1,4 @@
+require("dotenv").config({ path: "./.env" });
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
@@ -9,12 +10,15 @@ const sauceRoute = require("./routes/sauceRoute");
 
 mongoose
   .connect(
-    "mongodb+srv://julienARMAND:Bagus_database_access33@cluster0.qbney.mongodb.net/piiquante?retryWrites=true&w=majority",
-    //! Modification de la connexion avec un .env pour ne pas que les codes de connexion soit disponibles !!!//
+    "mongodb+srv://" +
+      process.env.DB_USER_PASS +
+      "@cluster0.qbney.mongodb.net/piiquante?retryWrites=true&w=majority",
     { useNewUrlParser: true, useUnifiedTopology: true }
   )
   .then(() => console.log("Connexion à MongoDB réussie !"))
-  .catch(() => console.log("Connexion à MongoDB échouée !"));
+  .catch((err) =>
+    console.log("Connexion à MongoDB échouée !", err, process.env.DB_USER_PASS)
+  );
 
 //* Utilisation d'express :
 
