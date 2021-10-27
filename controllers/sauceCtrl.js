@@ -2,26 +2,24 @@ const SauceModel = require("../models/sauceModel");
 const fs = require("fs");
 
 //* voir toutes les sauces :
-exports.showAll = (req, res, next) => {
+exports.showAll = (req, res) => {
   SauceModel.find()
     .then((sauces) => res.status(200).json(sauces))
     .catch((error) => res.status(400).json({ error }));
-  //next();
 };
 
 //* voir une seule sauce :
-exports.showOne = (req, res, next) => {
+exports.showOne = (req, res) => {
   SauceModel.findOne({ _id: req.params.id })
     .then((sauce) => res.status(200).json(sauce))
     .catch((error) => res.status(404).json({ error }));
-  //next();
 };
 
 //* Créer une nouvelle sauce :
-exports.createSauce = (req, res, next) => {
+exports.createSauce = (req, res) => {
   const sauceObject = JSON.parse(req.body.sauce);
   //console.log(req.body);
-  //delete sauceObject._id;
+  delete sauceObject._id;
   const sauce = new SauceModel({
     ...sauceObject,
     imageUrl: `${req.protocol}://${req.get("host")}/images/${
@@ -36,6 +34,48 @@ exports.createSauce = (req, res, next) => {
       .then(() => res.status(201).json({ message: "Sauce enregistrée" }))
       .catch((error) => res.status(400).json({ error }));
 };
+
+//* Créer une nouvelle sauce avec image par défaut:
+// exports.createSauce = (req, res, next) => {
+//   const sauceObject = JSON.parse(req.body.sauce);
+
+//   //console.log(req.body);
+//   delete sauceObject._id;
+//   console.log(req.file.filename);
+//   if (!req.file.filename) {
+//     const sauce = new SauceModel({
+//       ...sauceObject,
+//       imageUrl: `${req.protocol}://${req.get("host")}/images/defaultBottle.jpg`,
+
+//       likes: 0,
+//       dislikes: 0,
+//     });
+//     console.log(sauce),
+//       sauce
+//         .save()
+//         .then(() =>
+//           res
+//             .status(201)
+//             .json({ message: "Sauce enregistrée avec image par default" })
+//         )
+//         .catch((error) => res.status(400).json({ error }));
+//   } else {
+//     const sauce = new SauceModel({
+//       ...sauceObject,
+//       imageUrl: `${req.protocol}://${req.get("host")}/images/${
+//         req.file.filename
+//       }`,
+
+//       likes: 0,
+//       dislikes: 0,
+//     });
+//     console.log(sauce),
+//       sauce
+//         .save()
+//         .then(() => res.status(201).json({ message: "Sauce enregistrée" }))
+//         .catch((error) => res.status(400).json({ error }));
+//   }
+// };
 
 //* Modifier une sauce existante :
 

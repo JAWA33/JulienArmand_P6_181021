@@ -12,13 +12,11 @@ mongoose
   .connect(
     "mongodb+srv://" +
       process.env.DB_USER_PASS +
-      "@cluster0.qbney.mongodb.net/piiquante?retryWrites=true&w=majority",
+      "@cluster0.qbney.mongodb.net/piiquante",
     { useNewUrlParser: true, useUnifiedTopology: true }
   )
   .then(() => console.log("Connexion à MongoDB réussie !"))
-  .catch((err) =>
-    console.log("Connexion à MongoDB échouée !", err, process.env.DB_USER_PASS)
-  );
+  .catch((err) => console.log("Connexion à MongoDB échouée !", err));
 
 //* Utilisation d'express :
 
