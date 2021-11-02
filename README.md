@@ -23,7 +23,7 @@ En cas de problème, voir les informations complémentaires sur le README.md du 
 
 //----- Installation du serveur "backend", ce depot GIT :
 
-Commencer par ce dépot git, puis lancer npm install pour télécharger le node_modules.
+Commencer par cloner ce dépot git, puis lancer npm install pour télécharger le node_modules.
 
 Vous aurez besoin des packages suivants :
 
